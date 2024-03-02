@@ -1,0 +1,15 @@
+.navbar {
+    /* Your regular styling for the Navbar */
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    height: 50px;
+  }
+  
+  .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    /* Add any additional styles for the sticky state */
+  }
