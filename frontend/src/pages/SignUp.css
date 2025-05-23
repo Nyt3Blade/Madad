@@ -1,0 +1,139 @@
+.sign-up-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2D6A4F 0%, #40916C 100%);
+  padding: 2rem;
+}
+
+.sign-up-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
+.sign-up-card h1 {
+  color: #2D6A4F;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.subtitle {
+  color: #666;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sign-up-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.name-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #27ae60;
+}
+
+.terms {
+  margin-top: 0.5rem;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.terms-checkbox input[type="checkbox"] {
+  margin-top: 0.25rem;
+}
+
+.terms-checkbox a {
+  color: #27ae60;
+  text-decoration: none;
+}
+
+.terms-checkbox a:hover {
+  text-decoration: underline;
+}
+
+.sign-up-submit {
+  background: #27ae60;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+.sign-up-submit:hover {
+  background: #219a52;
+}
+
+.sign-in-prompt {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.sign-in-prompt a {
+  color: #27ae60;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sign-in-prompt a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .sign-up-card {
+    padding: 1.5rem;
+  }
+
+  .sign-up-card h1 {
+    font-size: 1.75rem;
+  }
+
+  .name-group {
+    grid-template-columns: 1fr;
+  }
+} 

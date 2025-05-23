@@ -1,0 +1,92 @@
+.parallax-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1px;
+}
+
+.parallax-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.parallax-background::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: var(--bg-image);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.parallax-layer img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Layer specific positioning */
+.layer-1 {
+  z-index: 4;
+}
+
+.layer-2 {
+  z-index: 3;
+}
+
+.layer-3 {
+  z-index: 2;
+}
+
+.parallax-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 5;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.parallax-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.parallax-content p {
+  font-size: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .parallax-content h1 {
+    font-size: 2rem;
+  }
+
+  .parallax-content p {
+    font-size: 1rem;
+  }
+} 

@@ -1,9 +1,25 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import datetime
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+# MongoDB connection
+try:
+    # MongoDB Atlas connection string
+    MONGODB_URI = "mongodb+srv://Nyt3Blade:19206082@cluster0.j5ccuko.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    client = MongoClient(MONGODB_URI)
+    db = client.madad_db
+    print("Successfully connected to MongoDB Atlas!")
+except Exception as e:
+    print(f"Error connecting to MongoDB: {e}")
 
 # Specify the path where images are stored
 UPLOAD_FOLDER = 'uploads'
@@ -21,7 +37,13 @@ def process_image():
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'temp_image.jpg')
         image.save(image_path)
 
-        # You can perform any processing on the image here
+        # Store image metadata in MongoDB
+        image_metadata = {
+            'filename': 'temp_image.jpg',
+            'path': image_path,
+            'uploaded_at': datetime.datetime.utcnow()
+        }
+        db.images.insert_one(image_metadata)
 
         # Return the processed image URL
         return jsonify({'image_url': f'/uploads/temp_image.jpg'}), 200

@@ -1,0 +1,65 @@
+.sign-in-button {
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f8f9fa;
+  background-color: transparent;
+  border: 3px solid #27ae60;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(39, 174, 96, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.sign-in-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(39, 174, 96, 0.15);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.sign-in-button:hover {
+  border-color: #219a52;
+  color: #219a52;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.sign-in-button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+  background-color: rgba(39, 174, 96, 0.2);
+}
+
+.sign-in-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(39, 174, 96, 0.2);
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+/* Variant for the top-right corner */
+.sign-in-button.top-right {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 100;
+  font-size: 1.4rem;
+  padding: 1.2rem 4rem;
+}
+
+/* Variant for the bottom center */
+.sign-in-button.bottom-center {
+  display: block;
+  margin: 3rem auto;
+  font-size: 1.4rem;
+  padding: 1.2rem 4rem;
+} 
