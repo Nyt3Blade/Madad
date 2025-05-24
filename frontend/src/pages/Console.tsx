@@ -1,25 +1,114 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, useLocation } from 'react-router-dom';
 import './Console.css';
 import Profile from '../components/Profile';
 import Settings from '../components/Settings';
 import Help from '../components/Help';
 import Farms from '../components/Farms';
-import Analytics from '../components/Analytics';
+import Medical from '../components/Medical';
 import Devices from '../components/Devices';
-import Reports from '../components/Reports';
 import Market from '../components/Market';
+import Dashboard from '../components/Dashboard';
+import Analyze from '../components/Analyze';
+
+interface UserDetails {
+  id: string;
+  email: string;
+  name: string;
+  farms: number;
+}
 
 const Console: React.FC = () => {
   const [profileDropdown, setProfileDropdown] = useState(false);
   const [notificationDropdown, setNotificationDropdown] = useState(false);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.log('No token found in localStorage');
+          navigate('/signin');
+          return;
+        }
+
+        console.log('Attempting to fetch user details...');
+
+        const response = await fetch('http://localhost:5000/basic_details', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          console.error('Server response error:', {
+            status: response.status,
+            statusText: response.statusText,
+            error: data.error
+          });
+
+          // Handle specific error cases
+          if (response.status === 401) {
+            console.log('Authentication error:', data.error);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate('/signin');
+            return;
+          }
+
+          throw new Error(data.error || 'Failed to fetch user details');
+        }
+
+        console.log('Successfully fetched user details:', data);
+        setUserDetails(data.user);
+      } catch (err) {
+        console.error('Error fetching user details:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        
+        // Handle network errors
+        if (err instanceof Error && err.message === 'Failed to fetch') {
+          setError('Unable to connect to the server. Please try again later.');
+          return;
+        }
+
+        // Handle authentication errors
+        if (err instanceof Error && (
+          err.message.includes('Token') || 
+          err.message.includes('authentication') ||
+          err.message.includes('401')
+        )) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          navigate('/signin');
+          return;
+        }
+      }
+    };
+
+    fetchUserDetails();
+  }, [navigate]);
 
   const handleMenuClick = (path: string) => {
     navigate(path);
     setProfileDropdown(false);
   };
+
+  const handleSignOut = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
+  if (error) {
+    return <div className="error-message">Error: {error}</div>;
+  }
 
   return (
     <div className="console">
@@ -89,7 +178,7 @@ const Console: React.FC = () => {
                 alt="Profile" 
                 className="profile-picture"
               />
-              <span className="profile-name">John Doe</span>
+              <span className="profile-name">{userDetails?.name || 'Loading...'}</span>
               <span className="dropdown-arrow">▼</span>
             </button>
             {profileDropdown && (
@@ -105,8 +194,8 @@ const Console: React.FC = () => {
                     className="profile-picture-large"
                   />
                   <div className="profile-info">
-                    <span className="profile-name-large">John Doe</span>
-                    <span className="profile-email">john.doe@example.com</span>
+                    <span className="profile-name-large">{userDetails?.name || 'Loading...'}</span>
+                    <span className="profile-email">{userDetails?.email || 'Loading...'}</span>
                   </div>
                 </div>
                 <div className="dropdown-divider"></div>
@@ -123,7 +212,7 @@ const Console: React.FC = () => {
                   Help
                 </button>
                 <div className="dropdown-divider"></div>
-                <button onClick={() => navigate('/')} className="sign-out">
+                <button onClick={handleSignOut} className="sign-out">
                   <span className="menu-icon">🚪</span>
                   Sign Out
                 </button>
@@ -156,12 +245,12 @@ const Console: React.FC = () => {
           </div>
           <div
             className={`menu-item ${
-              location.pathname === '/console/analytics' ? 'active' : ''
+              location.pathname === '/console/medical' ? 'active' : ''
             }`}
-            onClick={() => handleMenuClick('/console/analytics')}
+            onClick={() => handleMenuClick('/console/medical')}
           >
-            <span className="menu-icon">📈</span>
-            Analytics
+            <span className="menu-icon">👨‍⚕️</span>
+            Medical
           </div>
           <div
             className={`menu-item ${
@@ -174,12 +263,12 @@ const Console: React.FC = () => {
           </div>
           <div
             className={`menu-item ${
-              location.pathname === '/console/reports' ? 'active' : ''
+              location.pathname === '/console/Analyze' ? 'active' : ''
             }`}
-            onClick={() => handleMenuClick('/console/reports')}
+            onClick={() => handleMenuClick('/console/Analyze')}
           >
             <span className="menu-icon">📄</span>
-            Reports
+            Analyze
           </div>
           <div
             className={`menu-item ${
@@ -195,15 +284,15 @@ const Console: React.FC = () => {
         {/* Main Content */}
         <div className="main-content">
           <Routes>
-            <Route path="/" element={<div>Dashboard Overview</div>} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/help" element={<Help />} />
             <Route path="/farms" element={<Farms />} />
-            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/medical" element={<Medical />} />
             <Route path="/devices" element={<Devices />} />
-            <Route path="/reports" element={<Reports />} />
             <Route path="/market" element={<Market />} />
+            <Route path="/Analyze" element={<Analyze />} />
           </Routes>
         </div>
       </div>
